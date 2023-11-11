@@ -22,7 +22,7 @@ public class Main {
 
         JTextField inputDelayBeforeStart = new JTextField("3", 10);
         JTextField inputCountClick = new JTextField("10", 10);
-        JTextField inputDelay = new JTextField("100",10);
+        JTextField inputDelay = new JTextField("100", 10);
         JCheckBox infiniteCheckBox = new JCheckBox("Infinite");
         JCheckBox alwaysOnTOpCheckBox = new JCheckBox("Always On top", true);
         JButton startButton = new JButton("Start");
@@ -49,50 +49,60 @@ public class Main {
                         inputCountClick.setText("1");
                     }
                     if (inputCountClick.getText().isEmpty() || inputDelay.getText().isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Please enter values for Count clicks and Delay.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(frame, "Please enter values for Count clicks and Delay.", "Error", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                     if (!isNumeric(inputCountClick.getText()) || !isNumeric(inputDelay.getText())) {
-                        JOptionPane.showMessageDialog(null, "Please enter valid numeric values for Count clicks and Delay.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(frame, "Please enter valid numeric values for Count clicks and Delay.", "Error", JOptionPane.ERROR_MESSAGE);
                         return;
+                    }
+
+                    if (Integer.parseInt(inputDelay.getText()) < 50) {
+                        int result = JOptionPane.showConfirmDialog(frame, "Be careful! Low delay, if you use clicker in game, you can be banned.", "Warning", JOptionPane.OK_CANCEL_OPTION);
+                        if (result == JOptionPane.CANCEL_OPTION || result == JOptionPane.CLOSED_OPTION) {
+                            return;
+                        }
+
                     }
 
                     if (!isNotStop) {
                         isNotStop = true;
                     }
 
-                        isRunning = true;
-                        new Thread(() -> {
-                            System.out.println("Start button clicked!");
-                            startButton.setEnabled(false);
-                            inputCountClick.setEnabled(false);
-                            inputDelay.setEnabled(false);
-                            inputDelayBeforeStart.setEnabled(false);
-                            infiniteCheckBox.setEnabled(false);
+                    isRunning = true;
+                    new Thread(() -> {
+                        System.out.println("Start button clicked!");
+                        startButton.setEnabled(false);
+                        inputCountClick.setEnabled(false);
+                        inputDelay.setEnabled(false);
+                        inputDelayBeforeStart.setEnabled(false);
+                        infiniteCheckBox.setEnabled(false);
+                        alwaysOnTOpCheckBox.setEnabled(false);
 
 
-                            try {
-                                Thread.sleep(Integer.parseInt(inputDelayBeforeStart.getText()) * 1000);
-                            } catch (InterruptedException ex) {
-                                throw new RuntimeException(ex);
-                            }
+                        try {
+                            Thread.sleep(Integer.parseInt(inputDelayBeforeStart.getText()) * 1000);
+                        } catch (InterruptedException ex) {
+                            throw new RuntimeException(ex);
+                        }
 
-                            stopButton.setEnabled(true);
-                            Clicker.clicker(Integer.parseInt(inputCountClick.getText()), Integer.parseInt(inputDelay.getText()), infiniteCheckBox.isSelected());
+                        stopButton.setEnabled(true);
+                        Clicker.clicker(Integer.parseInt(inputCountClick.getText()), Integer.parseInt(inputDelay.getText()), infiniteCheckBox.isSelected());
 
-                            isRunning = false;
-                            isNotStop = true;
+                        isRunning = false;
+                        isNotStop = true;
 
-                            inputDelay.setEnabled(true);
-                            inputDelayBeforeStart.setEnabled(true);
-                            infiniteCheckBox.setEnabled(true);
-                            if (!infiniteCheckBox.isSelected()) {
-                                inputCountClick.setEnabled(true);
-                            }
-                            startButton.setEnabled(true);
-                            stopButton.setEnabled(false);
+                        inputDelay.setEnabled(true);
+                        inputDelayBeforeStart.setEnabled(true);
+                        infiniteCheckBox.setEnabled(true);
+                        alwaysOnTOpCheckBox.setEnabled(true);
+                        if (!infiniteCheckBox.isSelected()) {
+                            inputCountClick.setEnabled(true);
+                        }
+                        startButton.setEnabled(true);
+                        stopButton.setEnabled(false);
 
-                        }).start();
+                    }).start();
                 }
             }
         });
@@ -136,7 +146,7 @@ public class Main {
         frame.getContentPane().add(BorderLayout.CENTER, panel);
         frame.setSize(500, 200);
         frame.setVisible(true);
-        frame.setResizable(true);
+        frame.setResizable(false);
         frame.setFocusable(true);
         frame.requestFocusInWindow();
     }

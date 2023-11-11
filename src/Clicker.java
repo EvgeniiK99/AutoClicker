@@ -2,14 +2,10 @@ import java.awt.*;
 import java.awt.event.InputEvent;
 
 public class Clicker {
-
     public static void clicker(int count, int sleepTime, boolean isInfinite) {
         try {
-
             Robot r = new Robot();
             if (isInfinite) {
-
-
                 while (Main.isNotStop) {
                     int button = InputEvent.BUTTON1_DOWN_MASK;
                     r.mousePress(button);
@@ -30,5 +26,4 @@ public class Clicker {
             throw new RuntimeException(e);
         }
     }
-
 }
